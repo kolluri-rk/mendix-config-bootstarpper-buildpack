@@ -2,7 +2,7 @@
 
 This project offers a way to expose configuring from Spring Cloud Config Server to your Mendix app as a config file (myconfig.yaml). Normally this requires a client library to be used in code such as those available for .NET via SteelToe or Java via Spring. This project allows config server to be used with Mendix app. Note that since configuration will be written to file in build stage, if values in config server changes you need to restart the app.
 
-If config server binding is detected, it will replace any matching token in myconfig.yaml with config server value. Tokens are specified in format of `#{config:path}`
+If config server binding is detected, it will replace any matching token in myconfig.yaml with config server value. Tokens are specified in format of `_{config:path}_`
 
 ## How to Use
 
