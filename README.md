@@ -1,21 +1,33 @@
-### Web Config Transform Buildpack
+### Mendix Config Bootstarpper Buildpack
 
-A supply buildpack that will transform web.config based on the standard XSD transform templates. ASPNETCORE_ENVIRONMENT environmental variable is used to select the profile to be used. Ex. `ASPNETCORE_ENVIRONMENT=Debug`, results in `Web.Debug.config` being applied on top of `Web.Config`.
+This project offers a way to expose configuring from Spring Cloud Config Server to your Mendix app as a config file (myconfig.yaml). Normally this requires a client library to be used in code such as those available for .NET via SteelToe or Java via Spring. This project allows config server to be used with Mendix app. Note that since configuration will be written to file in build stage, if values in config server changes you need to restart the app.
 
-Any environment variable set with matching key configured in web.config `/configuration/appSettings` will have their values replaced.
+If config server binding is detected, it will replace any matching token in myconfig.yaml with config server value. Tokens are specified in format of `#{config:path}`
 
-If config server binding is detected, it will replace any matching token in web.config with config server value. Tokens are specified in format of `#{config:path}`
+## How to Use
 
-### Usage
+- Create Config server instance and bind it your your app
 
-Include buildpack in applications `manifest.yaml`. Example:
+- Apply as supply buildpack in your manifest:
 
-```yaml
-applications:
-- name: simpleapp
-  stack: windows2016
-  buildpacks: 
-    - https://github.com/macsux/web-config-transform-buildpack/releases/download/1.0/web-config-transform-buildpack.zip
-    - hwc_buildpack
-```
+  ```yaml
+  ---
+  applications:
+  - name: myapp
+    buildpacks: 
+    - https://github.com/kolluri-rk/mendix-config-bootstarpper-buildpack/releases/download/1.0/Pivotal.Mendix.Config.Bootstrapper.Buildpack-linux-x64-0.1.0.zip
+    - nodejs_buildpack
+    env:
+      SPRING__APPLICATION__NAME: myapp
+      SPRING__CLOUD__CONFIG__ENV: profile-name
+      SPRING__CLOUD__CONFIG__LABEL: label-name
+  ```
+
+(Note if targeting windows, make sure to substitute above buildpack URL with appropriate windows based release. Get latest compiled buildpack binary URL on GitHub releases page)
+
+Edit the env vars above:
+
+* `SPRING__APPLICATION__NAME` - name of the app in config server
+* `SPRING__CLOUD__CONFIG__ENV` - (optional) profile name
+* `SPRING__CLOUD__CONFIG__LABEL` - (optional) label name
 

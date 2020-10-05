@@ -6,7 +6,7 @@ namespace Pivotal.Mendix.Config.Bootstrapper.Buildpack
     {
         static int Main(string[] args)
         {
-            return new WebConfigTransformBuildpack().Run(args);
+            return new MendixConfigBootstrapperBuildpack().Run(args);
         }
     }
 }
